@@ -14,10 +14,10 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
     $rows = $pdo->query(
-        "SELECT m.id, m.usuario_id, u.nombre, u.email, m.especialidad, m.telefono
-         FROM medicos m
-         JOIN usuarios u ON u.id = m.usuario_id
-         ORDER BY u.nombre ASC"
+        "SELECT id, cedula, nombre, apellido_paterno, apellido_materno,
+                edad, genero, especialidad, telefono
+         FROM medicos
+         ORDER BY nombre ASC, apellido_paterno ASC"
     )->fetchAll();
 
     jexit(200, ['ok' => true, 'data' => $rows]);
@@ -27,43 +27,54 @@ if ($method === 'POST') {
     $inputs = json_decode(file_get_contents('php://input'), true);
     $action = $inputs['action'] ?? 'create';
 
-    if (!in_array($user['rol'], ['admin'], true)) {
-        jexit(403, ['ok' => false, 'message' => 'solo admin']);
-    }
-
     if ($action === 'create') {
-        $usuario_id = (int)($inputs['usuario_id'] ?? 0);
+        $cedula = trim($inputs['cedula'] ?? '');
+        $nombre = trim($inputs['nombre'] ?? '');
+        $ap_p = trim($inputs['apellido_paterno'] ?? '');
+        $ap_m = trim($inputs['apellido_materno'] ?? '');
+        $edad = (int)($inputs['edad'] ?? 0);
+        $genero = trim($inputs['genero'] ?? '');
         $especialidad = trim($inputs['especialidad'] ?? '');
         $telefono = trim($inputs['telefono'] ?? '');
 
-        if ($usuario_id <= 0 || $especialidad === '') {
+        if ($cedula === '' || $nombre === '' || $ap_p === '' || $ap_m === '' ||
+            $edad <= 0 || $genero === '' || $especialidad === '' || $telefono === '') {
             jexit(422, ['ok' => false, 'message' => 'datos invalidos']);
         }
 
         $stmt = $pdo->prepare(
-            "INSERT INTO medicos (usuario_id, especialidad, telefono)
-             VALUES (?, ?, ?)"
+            "INSERT INTO medicos
+             (cedula, nombre, apellido_paterno, apellido_materno, edad, genero, especialidad, telefono)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        $stmt->execute([$usuario_id, $especialidad, $telefono]);
+        $stmt->execute([$cedula, $nombre, $ap_p, $ap_m, $edad, $genero, $especialidad, $telefono]);
 
         jexit(200, ['ok' => true, 'id' => $pdo->lastInsertId()]);
     }
 
     if ($action === 'update') {
         $id = (int)($inputs['id'] ?? 0);
+        $cedula = trim($inputs['cedula'] ?? '');
+        $nombre = trim($inputs['nombre'] ?? '');
+        $ap_p = trim($inputs['apellido_paterno'] ?? '');
+        $ap_m = trim($inputs['apellido_materno'] ?? '');
+        $edad = (int)($inputs['edad'] ?? 0);
+        $genero = trim($inputs['genero'] ?? '');
         $especialidad = trim($inputs['especialidad'] ?? '');
         $telefono = trim($inputs['telefono'] ?? '');
 
-        if ($id <= 0 || $especialidad === '') {
+        if ($id <= 0 || $cedula === '' || $nombre === '' || $ap_p === '' || $ap_m === '' ||
+            $edad <= 0 || $genero === '' || $especialidad === '' || $telefono === '') {
             jexit(422, ['ok' => false, 'message' => 'datos invalidos']);
         }
 
         $stmt = $pdo->prepare(
             "UPDATE medicos
-             SET especialidad = ?, telefono = ?
+             SET cedula = ?, nombre = ?, apellido_paterno = ?, apellido_materno = ?,
+                 edad = ?, genero = ?, especialidad = ?, telefono = ?
              WHERE id = ?"
         );
-        $stmt->execute([$especialidad, $telefono, $id]);
+        $stmt->execute([$cedula, $nombre, $ap_p, $ap_m, $edad, $genero, $especialidad, $telefono, $id]);
 
         jexit(200, ['ok' => true]);
     }

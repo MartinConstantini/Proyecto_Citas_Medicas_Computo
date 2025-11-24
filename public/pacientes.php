@@ -63,7 +63,7 @@ if (!$user) {
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h1 class="h5 mb-0 text-primary-custom">pacientes</h1>
-          <p class="text-muted small mb-0">administracion basica de pacientes</p>
+          <p class="text-muted small mb-0">lista de pacientes registrados</p>
         </div>
         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarPaciente">
           agregar paciente
@@ -75,15 +75,16 @@ if (!$user) {
           <table class="table table-sm align-middle mb-0">
             <thead>
               <tr>
+                <th>id</th>
                 <th>nombre</th>
-                <th>correo</th>
-                <th>fecha nacimiento</th>
-                <th>telefono</th>
+                <th>edad</th>
+                <th>sexo</th>
+                <th>direccion</th>
                 <th class="text-end">acciones</th>
               </tr>
             </thead>
             <tbody id="tabla-pacientes">
-              <tr><td colspan="5" class="text-center text-muted small">cargando...</td></tr>
+              <tr><td colspan="6" class="text-center text-muted small">cargando...</td></tr>
             </tbody>
           </table>
         </div>
@@ -92,28 +93,44 @@ if (!$user) {
 
     <!-- modal agregar paciente -->
     <div class="modal fade" id="modalAgregarPaciente" tabindex="-1">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <form id="form-agregar-paciente">
+          <form id="form-agregar-paciente" class="small">
             <div class="modal-header">
               <h5 class="modal-title">agregar paciente</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body small">
-              <p class="text-muted small">
-                primero debes tener creado un usuario con rol paciente. aqui solo se vincula ese usuario con sus datos de paciente.
-              </p>
-              <div class="mb-2">
-                <label class="form-label">id usuario</label>
-                <input type="number" name="usuario_id" class="form-control input-soft" placeholder="id usuario existente" required>
-              </div>
-              <div class="mb-2">
-                <label class="form-label">fecha nacimiento</label>
-                <input type="date" name="fecha_nacimiento" class="form-control input-soft">
-              </div>
-              <div class="mb-2">
-                <label class="form-label">telefono</label>
-                <input type="text" name="telefono" class="form-control input-soft">
+            <div class="modal-body">
+              <div class="row g-2">
+                <div class="col-md-4">
+                  <label class="form-label">nombre</label>
+                  <input type="text" name="nombre" class="form-control input-soft" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">apellido paterno</label>
+                  <input type="text" name="apellido_paterno" class="form-control input-soft" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">apellido materno</label>
+                  <input type="text" name="apellido_materno" class="form-control input-soft" required>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">edad</label>
+                  <input type="number" name="edad" class="form-control input-soft" min="1" required>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">sexo</label>
+                  <select name="sexo" class="form-select input-soft" required>
+                    <option value="">seleccionar</option>
+                    <option value="masculino">masculino</option>
+                    <option value="femenino">femenino</option>
+                    <option value="otro">otro</option>
+                  </select>
+                </div>
+                <div class="col-md-8">
+                  <label class="form-label">direccion</label>
+                  <input type="text" name="direccion" class="form-control input-soft" required>
+                </div>
               </div>
             </div>
             <div class="modal-footer">
@@ -127,34 +144,49 @@ if (!$user) {
 
     <!-- modal editar paciente -->
     <div class="modal fade" id="modalEditarPaciente" tabindex="-1">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <form id="form-editar-paciente">
+          <form id="form-editar-paciente" class="small">
             <div class="modal-header">
               <h5 class="modal-title">editar paciente</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body small">
+            <div class="modal-body">
               <input type="hidden" name="id">
-              <div class="mb-2">
-                <label class="form-label">nombre</label>
-                <input type="text" name="nombre" class="form-control input-soft" disabled>
-              </div>
-              <div class="mb-2">
-                <label class="form-label">correo</label>
-                <input type="email" name="email" class="form-control input-soft" disabled>
-              </div>
-              <div class="mb-2">
-                <label class="form-label">fecha nacimiento</label>
-                <input type="date" name="fecha_nacimiento" class="form-control input-soft">
-              </div>
-              <div class="mb-2">
-                <label class="form-label">telefono</label>
-                <input type="text" name="telefono" class="form-control input-soft">
+              <div class="row g-2">
+                <div class="col-md-4">
+                  <label class="form-label">nombre</label>
+                  <input type="text" name="nombre" class="form-control input-soft" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">apellido paterno</label>
+                  <input type="text" name="apellido_paterno" class="form-control input-soft" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">apellido materno</label>
+                  <input type="text" name="apellido_materno" class="form-control input-soft" required>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">edad</label>
+                  <input type="number" name="edad" class="form-control input-soft" min="1" required>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">sexo</label>
+                  <select name="sexo" class="form-select input-soft" required>
+                    <option value="">seleccionar</option>
+                    <option value="masculino">masculino</option>
+                    <option value="femenino">femenino</option>
+                    <option value="otro">otro</option>
+                  </select>
+                </div>
+                <div class="col-md-8">
+                  <label class="form-label">direccion</label>
+                  <input type="text" name="direccion" class="form-control input-soft" required>
+                </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-danger btn-sm" id="btn-eliminar-paciente">eliminar</button>
+              <button type="button" id="btn-eliminar-paciente" class="btn btn-outline-danger btn-sm">eliminar</button>
               <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">cerrar</button>
               <button class="btn btn-primary btn-sm">guardar cambios</button>
             </div>

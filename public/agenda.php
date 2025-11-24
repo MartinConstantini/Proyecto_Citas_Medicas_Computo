@@ -76,6 +76,7 @@ if (!$user) {
             <div class="card-body">
               <h2 class="h6 mb-3 text-primary-custom">nueva cita</h2>
               <form id="form-cita" class="small">
+                <input type="hidden" name="id">
                 <div class="mb-2">
                   <label class="form-label">medico</label>
                   <select name="medico_id" class="form-select input-soft" required></select>

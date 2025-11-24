@@ -23,16 +23,12 @@ if ($method === 'POST' && $action === 'register') {
     $nombre = trim($inputs['nombre'] ?? '');
     $email = trim($inputs['email'] ?? '');
     $pass = (string)($inputs['password'] ?? '');
-    $rol = $inputs['rol'] ?? 'paciente';
 
     if ($nombre === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($pass) < 6) {
         jexit(422, ['ok' => false, 'message' => 'datos invalidos']);
     }
 
-    if (!in_array($rol, ['admin', 'medico', 'paciente'], true)) {
-        $rol = 'paciente';
-    }
-
+    $rol = 'usuario';
     $hash = password_hash($pass, PASSWORD_DEFAULT);
 
     try {
@@ -66,7 +62,7 @@ if ($method === 'POST' && $action === 'login') {
         jexit(401, ['ok' => false, 'message' => 'credenciales invalidas']);
     }
 
-    // solo una sesion activa por usuario: borrar anteriores
+    // solo una sesion activa por usuario
     $del = $pdo->prepare("DELETE FROM sessions WHERE user_id = ?");
     $del->execute([$user['id']]);
 

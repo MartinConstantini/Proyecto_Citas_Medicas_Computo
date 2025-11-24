@@ -1,4 +1,5 @@
-const API = '../api';
+// usamos un nombre distinto para no chocar con app.js
+const API_MED = '../api';
 
 const cuerpoTablaMedicos = document.getElementById('tabla-medicos');
 const formAgregarMedico = document.getElementById('form-agregar-medico');
@@ -15,31 +16,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function cargarMedicos() {
   try {
-    const res = await fetch(API + '/medicos.php');
+    const res = await fetch(API_MED + '/medicos.php');
     if (!res.ok) {
       const txt = await res.text();
       console.error('medicos error http', txt);
-      cuerpoTablaMedicos.innerHTML = '<tr><td colspan="5" class="text-center text-danger small">error al cargar medicos</td></tr>';
+      cuerpoTablaMedicos.innerHTML =
+        '<tr><td colspan="7" class="text-center text-danger small">error al cargar medicos</td></tr>';
       return;
     }
     const j = await res.json();
     if (!j.ok) {
-      cuerpoTablaMedicos.innerHTML = '<tr><td colspan="5" class="text-center text-danger small">error al cargar medicos</td></tr>';
+      cuerpoTablaMedicos.innerHTML =
+        '<tr><td colspan="7" class="text-center text-danger small">error al cargar medicos</td></tr>';
       return;
     }
 
     medicos = j.data || [];
     if (!medicos.length) {
-      cuerpoTablaMedicos.innerHTML = '<tr><td colspan="5" class="text-center text-muted small">no hay medicos registrados</td></tr>';
+      cuerpoTablaMedicos.innerHTML =
+        '<tr><td colspan="7" class="text-center text-muted small">no hay medicos registrados</td></tr>';
       return;
     }
 
     cuerpoTablaMedicos.innerHTML = medicos.map(function (m) {
+      const nombreCompleto = m.nombre + ' ' + m.apellido_paterno + ' ' + m.apellido_materno;
       return '<tr>' +
-        '<td>' + m.nombre + '</td>' +
-        '<td>' + m.email + '</td>' +
-        '<td>' + (m.especialidad || '') + '</td>' +
-        '<td>' + (m.telefono || '') + '</td>' +
+        '<td>' + m.id + '</td>' +
+        '<td>' + m.cedula + '</td>' +
+        '<td>' + nombreCompleto + '</td>' +
+        '<td>' + m.genero + '</td>' +
+        '<td>' + m.especialidad + '</td>' +
+        '<td>' + m.telefono + '</td>' +
         '<td class="text-end">' +
           '<button class="btn btn-outline-primary btn-sm" data-id="' + m.id + '">editar</button>' +
         '</td>' +
@@ -54,7 +61,8 @@ async function cargarMedicos() {
     });
   } catch (err) {
     console.error('medicos error catch', err);
-    cuerpoTablaMedicos.innerHTML = '<tr><td colspan="5" class="text-center text-danger small">error de conexion</td></tr>';
+    cuerpoTablaMedicos.innerHTML =
+      '<tr><td colspan="7" class="text-center text-danger small">error de conexion</td></tr>';
   }
 }
 
@@ -63,18 +71,24 @@ formAgregarMedico.onsubmit = async function (e) {
 
   const data = {
     action: 'create',
-    usuario_id: Number(formAgregarMedico.usuario_id.value),
+    cedula: formAgregarMedico.cedula.value.trim(),
+    nombre: formAgregarMedico.nombre.value.trim(),
+    apellido_paterno: formAgregarMedico.apellido_paterno.value.trim(),
+    apellido_materno: formAgregarMedico.apellido_materno.value.trim(),
+    edad: Number(formAgregarMedico.edad.value),
+    genero: formAgregarMedico.genero.value,
     especialidad: formAgregarMedico.especialidad.value.trim(),
     telefono: formAgregarMedico.telefono.value.trim()
   };
 
-  if (!data.usuario_id || !data.especialidad) {
+  if (!data.cedula || !data.nombre || !data.apellido_paterno || !data.apellido_materno ||
+      !data.edad || !data.genero || !data.especialidad || !data.telefono) {
     alert('datos incompletos');
     return;
   }
 
   try {
-    const res = await fetch(API + '/medicos.php', {
+    const res = await fetch(API_MED + '/medicos.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -101,10 +115,14 @@ function abrirEditarMedico(id) {
   if (!m) return;
 
   formEditarMedico.id.value = m.id;
-  formEditarMedico.nombre.value = m.nombre || '';
-  formEditarMedico.email.value = m.email || '';
-  formEditarMedico.especialidad.value = m.especialidad || '';
-  formEditarMedico.telefono.value = m.telefono || '';
+  formEditarMedico.cedula.value = m.cedula;
+  formEditarMedico.nombre.value = m.nombre;
+  formEditarMedico.apellido_paterno.value = m.apellido_paterno;
+  formEditarMedico.apellido_materno.value = m.apellido_materno;
+  formEditarMedico.edad.value = m.edad;
+  formEditarMedico.genero.value = m.genero;
+  formEditarMedico.especialidad.value = m.especialidad;
+  formEditarMedico.telefono.value = m.telefono;
 
   modalEditar.show();
 }
@@ -115,17 +133,24 @@ formEditarMedico.onsubmit = async function (e) {
   const data = {
     action: 'update',
     id: Number(formEditarMedico.id.value),
+    cedula: formEditarMedico.cedula.value.trim(),
+    nombre: formEditarMedico.nombre.value.trim(),
+    apellido_paterno: formEditarMedico.apellido_paterno.value.trim(),
+    apellido_materno: formEditarMedico.apellido_materno.value.trim(),
+    edad: Number(formEditarMedico.edad.value),
+    genero: formEditarMedico.genero.value,
     especialidad: formEditarMedico.especialidad.value.trim(),
     telefono: formEditarMedico.telefono.value.trim()
   };
 
-  if (!data.id || !data.especialidad) {
+  if (!data.id || !data.cedula || !data.nombre || !data.apellido_paterno || !data.apellido_materno ||
+      !data.edad || !data.genero || !data.especialidad || !data.telefono) {
     alert('datos incompletos');
     return;
   }
 
   try {
-    const res = await fetch(API + '/medicos.php', {
+    const res = await fetch(API_MED + '/medicos.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -160,7 +185,7 @@ btnEliminarMedico.onclick = async function () {
   };
 
   try {
-    const res = await fetch(API + '/medicos.php', {
+    const res = await fetch(API_MED + '/medicos.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

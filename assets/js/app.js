@@ -2,10 +2,7 @@ const API = '../api';
 
 async function logout() {
   try {
-    const res = await fetch(API + '/logout.php', {
-      method: 'POST'
-    });
-    // ignoramos respuesta, solo redirigimos
+    await fetch(API + '/logout.php', { method: 'POST' });
   } catch (err) {
     console.error('logout error', err);
   } finally {
