@@ -1,0 +1,171 @@
+:root {
+  --primary-blue: #1b4f72;
+  --primary-light: #eaf4fb;
+  --accent-blue: #3498db;
+  --soft-blue: #f2f7fb;
+  --nav-blue: #123149;
+  --text-main: #1c2833;
+  --text-muted: #7b8a9b;
+  --border-soft: #d6e2f0;
+}
+
+body {
+  font-family: system-ui, -apple-system, blinkmacsystemfont, "segoe ui", sans-serif;
+  color: var(--text-main);
+}
+
+/* fondo general */
+
+.bg-body-custom {
+  background: linear-gradient(135deg, #f6fbff, #eef4fb);
+}
+
+.bg-soft-blue {
+  background: radial-gradient(circle at top, #e6f1ff 0, #f7fbff 50%, #eef4fb 100%);
+}
+
+/* navbar */
+
+.bg-nav {
+  background-color: var(--nav-blue);
+}
+
+.nav-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.btn-soft-blue {
+  background-color: var(--primary-light);
+  color: var(--primary-blue);
+  border: none;
+}
+
+.btn-soft-blue:hover {
+  background-color: #d6e4f4;
+  color: var(--primary-blue);
+}
+
+/* login */
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  background: #ffffff;
+  border-radius: 18px;
+}
+
+.login-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.login-side-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.input-soft {
+  background-color: #f8fbff;
+  border-color: var(--border-soft);
+}
+
+.input-soft:focus {
+  background-color: #ffffff;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 0.15rem rgba(52, 152, 219, 0.25);
+}
+
+.text-primary-custom {
+  color: var(--primary-blue);
+}
+
+/* tarjetas panel */
+
+.card-soft-blue {
+  background: linear-gradient(135deg, #f7fbff, #eef3fb);
+}
+
+.mini-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 12px 10px;
+  border: 1px solid var(--border-soft);
+}
+
+.mini-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.mini-value {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--primary-blue);
+}
+
+/* lista de citas */
+
+.dash-item {
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  border: 1px solid #e0e7f2;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-date {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.dash-main {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-blue);
+}
+
+.dash-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* calendario fullcalendar */
+
+#calendar {
+  min-height: 500px;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border-radius: 12px;
+  border-color: #e0e7f2;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 18px;
+  color: var(--primary-blue);
+}
+
+.fc .fc-button-primary {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+.fc .fc-button-primary:not(:disabled):hover {
+  background-color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+.fc .fc-daygrid-day-number,
+.fc .fc-col-header-cell-cushion {
+  color: var(--text-main);
+}
