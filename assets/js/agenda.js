@@ -1,77 +1,110 @@
-const API = '../api';
+// usamos otro nombre para no chocar con app.js
+const API_AGENDA = '../api';
 
 let calendario;
 let citasData = [];
 
 const formCita = document.getElementById('form-cita');
+const campoId = formCita.querySelector('input[name="id"]');
+const selMedico = formCita.medico_id;
+const selPaciente = formCita.paciente_id;
+const btnEliminarCita = document.getElementById('btn-eliminar-cita');
 
 document.addEventListener('DOMContentLoaded', function () {
   const calendarEl = document.getElementById('calendar');
 
-  calendario = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    locale: 'es',
-    height: 600,
-    eventClick: function (info) {
-      const id = Number(info.event.id);
-      const c = citasData.find(function (x) { return x.id === id; });
-      if (!c) return;
+  try {
+    calendario = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'es',
+      height: 600,
+      selectable: true,
+      dateClick: function (info) {
+        formCita.fecha.value = info.dateStr;
+        campoId.value = '';
+      },
+      eventClick: function (info) {
+        const id = Number(info.event.id);
+        const c = citasData.find(function (x) { return x.id === id; });
+        if (!c) return;
 
-      // llenar formulario para editar
-      formCita.id.value = c.id;
-      formCita.medico_id.value = c.medico_id;
-      formCita.paciente_id.value = c.paciente_id;
-      formCita.fecha.value = c.fecha;
-      formCita.hora_inicio.value = c.hora_inicio;
-      formCita.hora_fin.value = c.hora_fin;
-      formCita.motivo.value = c.motivo || '';
+        campoId.value = c.id;
+        selMedico.value = String(c.medico_id);
+        selPaciente.value = String(c.paciente_id);
+        formCita.fecha.value = c.fecha;
+        formCita.hora_inicio.value = c.hora_inicio;
+        formCita.hora_fin.value = c.hora_fin;
+        formCita.motivo.value = c.motivo || '';
 
-      if (confirm('quieres borrar esta cita? aceptar borra, cancelar solo edita')) {
-        borrarCita(c.id);
+        calendario.gotoDate(c.fecha);
       }
-    }
-  });
+    });
 
-  calendario.render();
+    calendario.render();
+  } catch (err) {
+    console.error('error al inicializar fullcalendar', err);
+    return;
+  }
 
   cargarMedicosPacientes();
   cargarCitas();
 });
 
 async function cargarMedicosPacientes() {
-  const selMed = formCita.medico_id;
-  const selPac = formCita.paciente_id;
-
   try {
     const [resM, resP] = await Promise.all([
-      fetch(API + '/medicos.php'),
-      fetch(API + '/pacientes.php')
+      fetch(API_AGENDA + '/medicos.php'),
+      fetch(API_AGENDA + '/pacientes.php')
     ]);
 
-    const jM = await resM.json();
-    const jP = await resP.json();
+    if (!resM.ok || !resP.ok) {
+      console.error('error http medicos/pacientes', resM.status, resP.status);
+    }
+
+    let jM = { ok: false };
+    let jP = { ok: false };
+
+    try {
+      jM = await resM.json();
+    } catch (e) {
+      console.error('error parse json medicos', e);
+    }
+
+    try {
+      jP = await resP.json();
+    } catch (e) {
+      console.error('error parse json pacientes', e);
+    }
 
     if (jM.ok) {
-      selMed.innerHTML = '<option value="">seleccionar</option>' + (jM.data || []).map(function (m) {
-        const nombre = m.nombre + ' ' + m.apellido_paterno;
-        return '<option value="' + m.id + '">' + nombre + ' (' + m.especialidad + ')</option>';
-      }).join('');
+      selMedico.innerHTML = '<option value="">seleccionar</option>' +
+        (jM.data || []).map(function (m) {
+          const nombre = m.nombre + ' ' + m.apellido_paterno;
+          return '<option value="' + m.id + '">' + nombre + ' (' + m.especialidad + ')</option>';
+        }).join('');
+    } else {
+      selMedico.innerHTML = '<option value="">error al cargar</option>';
     }
 
     if (jP.ok) {
-      selPac.innerHTML = '<option value="">seleccionar</option>' + (jP.data || []).map(function (p) {
-        const nombre = p.nombre + ' ' + p.apellido_paterno;
-        return '<option value="' + p.id + '">' + nombre + '</option>';
-      }).join('');
+      selPaciente.innerHTML = '<option value="">seleccionar</option>' +
+        (jP.data || []).map(function (p) {
+          const nombre = p.nombre + ' ' + p.apellido_paterno;
+          return '<option value="' + p.id + '">' + nombre + '</option>';
+        }).join('');
+    } else {
+      selPaciente.innerHTML = '<option value="">error al cargar</option>';
     }
   } catch (err) {
     console.error('error cargar medicos/pacientes', err);
+    selMedico.innerHTML = '<option value="">error</option>';
+    selPaciente.innerHTML = '<option value="">error</option>';
   }
 }
 
 async function cargarCitas() {
   try {
-    const res = await fetch(API + '/citas.php');
+    const res = await fetch(API_AGENDA + '/citas.php');
     if (!res.ok) {
       const txt = await res.text();
       console.error('citas error http', txt);
@@ -100,12 +133,13 @@ async function cargarCitas() {
 formCita.onsubmit = async function (e) {
   e.preventDefault();
 
-  const id = Number(formCita.id.value) || 0;
+  const id = Number(campoId.value) || 0;
+
   const data = {
     action: id ? 'update' : 'create',
     id: id || undefined,
-    medico_id: Number(formCita.medico_id.value),
-    paciente_id: Number(formCita.paciente_id.value),
+    medico_id: Number(selMedico.value),
+    paciente_id: Number(selPaciente.value),
     fecha: formCita.fecha.value,
     hora_inicio: formCita.hora_inicio.value,
     hora_fin: formCita.hora_fin.value,
@@ -118,7 +152,7 @@ formCita.onsubmit = async function (e) {
   }
 
   try {
-    const res = await fetch(API + '/citas.php', {
+    const res = await fetch(API_AGENDA + '/citas.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -132,7 +166,7 @@ formCita.onsubmit = async function (e) {
 
     alert('cita guardada');
     formCita.reset();
-    formCita.id.value = '';
+    campoId.value = '';
     cargarCitas();
   } catch (err) {
     console.error('guardar cita error', err);
@@ -140,9 +174,19 @@ formCita.onsubmit = async function (e) {
   }
 };
 
-async function borrarCita(id) {
+btnEliminarCita.onclick = async function () {
+  const id = Number(campoId.value);
+  if (!id) {
+    alert('selecciona primero una cita del calendario');
+    return;
+  }
+
+  if (!confirm('seguro que deseas eliminar esta cita?')) {
+    return;
+  }
+
   try {
-    const res = await fetch(API + '/citas.php', {
+    const res = await fetch(API_AGENDA + '/citas.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'delete', id: id })
@@ -156,10 +200,10 @@ async function borrarCita(id) {
 
     alert('cita eliminada');
     formCita.reset();
-    formCita.id.value = '';
+    campoId.value = '';
     cargarCitas();
   } catch (err) {
     console.error('borrar cita error', err);
     alert('error de conexion');
   }
-}
+};

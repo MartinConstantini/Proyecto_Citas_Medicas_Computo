@@ -1,4 +1,4 @@
-const API = '../api';
+const API_DASH = '../api';
 
 const lista = document.getElementById('lista-citas');
 const statHoy = document.getElementById('stat-hoy');
@@ -15,7 +15,7 @@ function hoyString() {
 
 async function loadCitas() {
   try {
-    const res = await fetch(API + '/citas.php');
+    const res = await fetch(API_DASH + '/citas.php');
     if (!res.ok) {
       const txt = await res.text();
       console.error('citas error http', txt);
@@ -56,9 +56,9 @@ async function loadCitas() {
     lista.innerHTML = recientes.map(function (c) {
       return '<li class="dash-item">' +
         '<span class="dash-date">' + c.fecha + ' ' + c.hora_inicio + '</span>' +
-        '<span class="dash-main">' + c.nombre_medico + '</span>' +
-        '<span class="dash-sub">paciente: ' + c.nombre_paciente + '</span>' +
-        '</li>';
+        '<span class="dash-main">' + c.medico_nombre + '</span>' +
+        '<span class="dash-sub">paciente: ' + c.paciente_nombre + '</span>' +
+      '</li>';
     }).join('');
   } catch (err) {
     console.error('citas error catch', err);

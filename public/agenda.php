@@ -26,6 +26,7 @@ if (!$user) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>citas medicas - agenda</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
     <link href="../assets/css/style.css" rel="stylesheet">
@@ -61,7 +62,6 @@ if (!$user) {
     </nav>
 
     <main class="container py-4">
-      <!-- contenido igual que antes -->
       <div class="row g-4">
         <div class="col-lg-8">
           <div class="card border-0 shadow-sm">
@@ -74,40 +74,59 @@ if (!$user) {
         <div class="col-lg-4">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
-              <h2 class="h6 mb-3 text-primary-custom">nueva cita</h2>
+              <h2 class="h6 text-primary-custom mb-3">nueva cita</h2>
+
               <form id="form-cita" class="small">
                 <input type="hidden" name="id">
+
                 <div class="mb-2">
                   <label class="form-label">medico</label>
-                  <select name="medico_id" class="form-select input-soft" required></select>
+                  <select name="medico_id" class="form-select input-soft" required>
+                    <option value="">cargando...</option>
+                  </select>
                 </div>
+
                 <div class="mb-2">
                   <label class="form-label">paciente</label>
-                  <select name="paciente_id" class="form-select input-soft" required></select>
+                  <select name="paciente_id" class="form-select input-soft" required>
+                    <option value="">cargando...</option>
+                  </select>
                 </div>
+
                 <div class="mb-2">
                   <label class="form-label">fecha</label>
                   <input type="date" name="fecha" class="form-control input-soft" required>
                 </div>
-                <div class="row">
-                  <div class="col-6 mb-2">
+
+                <div class="row g-2 mb-2">
+                  <div class="col-6">
                     <label class="form-label">hora inicio</label>
                     <input type="time" name="hora_inicio" class="form-control input-soft" required>
                   </div>
-                  <div class="col-6 mb-2">
+                  <div class="col-6">
                     <label class="form-label">hora fin</label>
                     <input type="time" name="hora_fin" class="form-control input-soft" required>
                   </div>
                 </div>
-                <div class="mb-2">
+
+                <div class="mb-3">
                   <label class="form-label">motivo</label>
-                  <textarea name="motivo" class="form-control input-soft" rows="2"></textarea>
+                  <textarea name="motivo" rows="3" class="form-control input-soft"></textarea>
                 </div>
-                <button class="btn btn-primary w-100 mt-2">guardar cita</button>
+
+                <div class="d-flex justify-content-between">
+                  <button type="button" id="btn-eliminar-cita" class="btn btn-outline-danger btn-sm">
+                    eliminar
+                  </button>
+                  <button class="btn btn-primary btn-sm">
+                    guardar cita
+                  </button>
+                </div>
+
+                <p class="text-muted small mt-3 mb-0">
+                  las citas se muestran en el calendario de forma visual con colores azules
+                </p>
               </form>
-              <p class="text-muted small mt-3 mb-0">
-                las citas se muestran en el calendario de forma visual con colores azules
-              </p>
             </div>
           </div>
         </div>
@@ -117,8 +136,13 @@ if (!$user) {
     <script>
       const usuarioActual = <?php echo json_encode($user, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- version global de fullcalendar -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales-all.global.min.js"></script>
+
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/agenda.js"></script>
   </body>

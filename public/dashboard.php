@@ -60,7 +60,6 @@ if (!$user) {
     </nav>
 
     <main class="container py-4">
-      <!-- contenido igual que antes -->
       <div class="row g-4 align-items-stretch">
         <div class="col-md-8">
           <div class="card card-soft-blue border-0 shadow-sm h-100">
@@ -116,8 +115,8 @@ if (!$user) {
     <script>
       const usuarioActual = <?php echo json_encode($user, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/app.js"></script>
-    <script src="../assets/js/dashboard.js"></script>
-  </body>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+ </body>
 </html>
