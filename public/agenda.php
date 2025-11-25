@@ -74,44 +74,44 @@ if (!$user) {
         <div class="col-lg-4">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
-              <h2 class="h6 text-primary-custom mb-3">nueva cita</h2>
+              <h2 class="h6 text-primary-custom mb-3">Citas medicas</h2>
 
               <form id="form-cita" class="small">
                 <input type="hidden" name="id">
 
                 <div class="mb-2">
-                  <label class="form-label">medico</label>
+                  <label class="form-label">Medico</label>
                   <select name="medico_id" class="form-select input-soft" required>
                     <option value="">cargando...</option>
                   </select>
                 </div>
 
                 <div class="mb-2">
-                  <label class="form-label">paciente</label>
+                  <label class="form-label">Nombre Paciente</label>
                   <select name="paciente_id" class="form-select input-soft" required>
                     <option value="">cargando...</option>
                   </select>
                 </div>
 
                 <div class="mb-2">
-                  <label class="form-label">fecha</label>
+                  <label class="form-label">Fecha</label>
                   <input type="date" name="fecha" class="form-control input-soft" required>
                 </div>
 
                 <div class="row g-2 mb-2">
                   <div class="col-6">
-                    <label class="form-label">hora inicio</label>
+                    <label class="form-label">Hora inicio de la consulta</label>
                     <input type="time" name="hora_inicio" class="form-control input-soft" required>
                   </div>
                   <div class="col-6">
-                    <label class="form-label">hora fin</label>
+                    <label class="form-label">hora fin consulta</label>
                     <input type="time" name="hora_fin" class="form-control input-soft" required>
                   </div>
                 </div>
 
                 <div class="mb-3">
-                  <label class="form-label">motivo</label>
-                  <textarea name="motivo" rows="3" class="form-control input-soft"></textarea>
+                  <label class="form-label">Motivo</label>
+                  <textarea name="motivo" rows="3" class="form-control input-soft" placeholder="Escribe los motivos de la consulta medica"></textarea>
                 </div>
 
                 <div class="d-flex justify-content-between">
@@ -124,7 +124,7 @@ if (!$user) {
                 </div>
 
                 <p class="text-muted small mt-3 mb-0">
-                  las citas se muestran en el calendario de forma visual con colores azules
+                  Informacion de sitas medicas
                 </p>
               </form>
             </div>

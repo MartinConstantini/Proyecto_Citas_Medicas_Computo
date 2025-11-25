@@ -30,9 +30,6 @@
           <label class="form-label small text-muted">contrasena</label>
           <input type="password" name="password" class="form-control input-soft" placeholder="minimo 6 caracteres" minlength="6" required>
         </div>
-        <p class="text-muted small mb-2">
-          las cuentas creadas desde aqui se registran con rol paciente
-        </p>
         <button class="btn btn-primary w-100 mt-1">crear cuenta</button>
       </form>
 

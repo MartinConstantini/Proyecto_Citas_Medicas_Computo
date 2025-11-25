@@ -34,10 +34,6 @@
         <a href="signup.php" class="link-primary">crear cuenta</a>
       </p>
 
-      <div class="mt-4 d-flex align-items-center small text-muted">
-        <img src="../assets/img/imagen1.png" alt="clinica" class="login-side-img me-2">
-        <span>prototipo academico minimalista para gestion de citas medicas</span>
-      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
