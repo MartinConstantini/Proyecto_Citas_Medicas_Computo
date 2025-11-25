@@ -64,9 +64,9 @@ if (!$user) {
         <div class="col-md-8">
           <div class="card card-soft-blue border-0 shadow-sm h-100">
             <div class="card-body">
-              <h2 class="h5 mb-1 text-primary-custom">bienvenido</h2>
+              <h2 class="h5 mb-1 text-primary-custom">Panel General</h2>
               <p class="text-muted small mb-3">
-                este panel te permite ver un resumen rapido de las citas medicas registradas en el sistema
+                Vista rapida de citas
               </p>
 
               <div class="row g-3 mb-3">
@@ -99,9 +99,9 @@ if (!$user) {
         <div class="col-md-4">
           <div class="card border-0 shadow-sm h-100">
             <div class="card-body d-flex flex-column">
-              <h3 class="h6 mb-2 text-primary-custom">informacion visual</h3>
+              <h3 class="h6 mb-2 text-primary-custom">Agenda Citas medicas</h3>
               <p class="text-muted small">
-                este es un sistema academico minimalista inspirado en plataformas modernas de clinicas
+                SIstema de control de citas medicas, EL medicon
               </p>
               <div class="text-center mt-auto">
                 <img src="../assets/img/imagen1.png" alt="imagen demo" class="img-fluid rounded-3 shadow-sm">
